@@ -222,9 +222,16 @@ func configureHostname(props map[string]string) {
 	log.Info("configuring hostname ...")
 	if hostname, ok := props["hostname"]; ok {
 		// static
-		log.Info("writing /etc/hostname ...")
-		err := dry.FileSetString("/etc/hostname", hostname)
-		gstack.PanicIfErr(err)
+		if domain, yes := props["domain"]; yes {
+			log.Info("writing /etc/hostname ...")
+			err := dry.FileSetString("/etc/hostname", hostname+domain)
+			gstack.PanicIfErr(err)
+
+		} else {
+			log.Info("writing /etc/hostname ...")
+			err := dry.FileSetString("/etc/hostname", hostname)
+			gstack.PanicIfErr(err)
+		}
 
 		// transient
 		log.Infof("executing: hostname %s ...", hostname)
