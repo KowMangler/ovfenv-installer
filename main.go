@@ -224,7 +224,7 @@ func configureHostname(props map[string]string) {
 		// static
 		if domain, yes := props["domain"]; yes {
 			log.Info("writing /etc/hostname ...")
-			err := dry.FileSetString("/etc/hostname", hostname+domain)
+			err := dry.FileSetString("/etc/hostname", hostname+"."+domain)
 			gstack.PanicIfErr(err)
 
 		} else {
